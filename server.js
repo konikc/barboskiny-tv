@@ -30,17 +30,13 @@ app.get('/live', (req, res) => {
 
    console.log(`Запуск трансляции с логотипом: part${ep}.mp4`);
 
-    // Запускаем FFmpeg с наложением водяного знака
+    console.log(`Запуск трансляции: part${ep}.mp4`);
+
     const ffmpeg = spawn('ffmpeg', [
         '-re', 
         '-i', videoUrl,
-        '-i', 'logo.png', // Подключаем твой логотип
-        '-filter_complex', 'overlay=main_w-overlay_w-20:20', // Правый верхний угол с отступом 20px
-        '-c:v', 'libx264', // Кодек для сжатия видео
-        '-preset', 'ultrafast', // Максимально быстрая скорость (чтобы Render не тормозил)
-        '-crf', '28', // Оптимальное качество для экономии ресурсов
-        '-c:a', 'copy', // Звук оставляем без изменений (0% нагрузки)
-        '-f', 'mpegts', 
+        '-c', 'copy',      // Возвращаем 0% нагрузки на процессор
+        '-f', 'mpegts',    
         'pipe:1'
     ]);
     ffmpeg.stdout.pipe(res);
