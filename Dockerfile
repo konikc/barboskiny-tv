@@ -1,7 +1,7 @@
 FROM node:18-slim
 
-# Устанавливаем FFmpeg внутрь сервера Render
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+# Копируем уже готовый статический FFmpeg (это займет 2 секунды вместо 10 минут!)
+COPY --from=mwader/static-ffmpeg:6.1 /ffmpeg /usr/local/bin/
 
 WORKDIR /app
 
