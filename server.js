@@ -33,9 +33,12 @@ app.get('/live', (req, res) => {
     console.log(`Запуск трансляции: part${ep}.mp4`);
 
     const ffmpeg = spawn('ffmpeg', [
+        '-reconnect', '1',           // Включаем авто-переподключение при обрыве
+        '-reconnect_streamed', '1',  // Разрешаем переподключать потоковое видео
+        '-reconnect_delay_max', '5', // Ждать максимум 5 секунд при сбое связи
         '-re', 
         '-i', videoUrl,
-        '-c', 'copy',      // Возвращаем 0% нагрузки на процессор
+        '-c', 'copy',      
         '-f', 'mpegts',    
         'pipe:1'
     ]);
